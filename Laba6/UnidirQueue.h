@@ -40,23 +40,25 @@ public:
 		other.rear = nullptr;
 		other.size = 0;
 	}
-	void push(const T value) {
+	void push(const T& value) override {
 		Node<T>* temp = new Node<T>(value);
 		this->size++;
 		if (rear == nullptr) {
 			front = rear = temp;
 			return;
 		}
+		temp->ptr = this->front;
 		this->rear->ptr = temp;
 		this->rear = temp;
 	}
 
-	T pop() {
+	T pop() override {
 		if (front == nullptr)
 			return NULL;
 		this->size--;
 		Node<T>* temp = front;
 		this->front = front->ptr;
+		this->rear->ptr = front;
 		if (front == nullptr)
 			rear = nullptr;
 		T res = temp->value;
@@ -86,11 +88,11 @@ public:
 		return *this;
 	}
 
-	T Peek() {
+	T Peek() override {
 		return this->front->value;
 	}
 
-	int GetSize() {
+	int GetSize() override {
 		return this->size;
 	}
 };
