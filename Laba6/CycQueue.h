@@ -1,15 +1,13 @@
-#include "Node.h"
-#include "Queue.h"
-
 #include <iostream>
 using namespace std;
 
 template<typename T>
-class CycQueue : Queue<T> {
+class CycQueue : public Queue<T> {
 	Node<T>* front;
 	Node<T>* rear;
 	int size = 0;
 public:
+	template<typename T> friend ostream& operator<<(ostream& out, const CycQueue<T>& queue);
 	CycQueue() {
 		this->front = nullptr;
 		this->rear = nullptr;
@@ -40,7 +38,7 @@ public:
 		other.rear = nullptr;
 		other.size = 0;
 	}
-	push(const T value) {
+	void push(const T value) {
 		Node<T>* temp = new Node<T>(value);
 		this->size++;
 		if (rear == nullptr) {
@@ -65,7 +63,7 @@ public:
 		return res;
 	}
 
-	CycQueue<T>& operator=(CycQueue&& other) {
+	CycQueue<T>& operator=(CycQueue<T>&& other) {
 		if (this == &other) {
 			return *this;
 		}
@@ -87,16 +85,6 @@ public:
 		return *this;
 	}
 
-	ostream& operator<<(ostream& out, const CycQueue<T>& queue) {
-		Node<T>* temp = queue.front;
-		out << temp->value;
-		for (int i = 2; i <= queue.size; i++) {
-			temp = temp->ptr;
-			out << " " << temp->value;
-		}
-		return out;
-	}
-
 	T Peek() {
 		return this->front->value;
 	}
@@ -104,4 +92,16 @@ public:
 	int GetSize() {
 		return this->size;
 	}
+
 };
+
+template<typename T>
+ostream& operator<<(ostream& out, const CycQueue<T>& queue) {
+	Node<T>* temp = queue.front;
+	out << temp->value;
+	for (int i = 2; i <= queue.size; i++) {
+		temp = temp->ptr;
+		out << " " << temp->value;
+	}
+	return out;
+}
